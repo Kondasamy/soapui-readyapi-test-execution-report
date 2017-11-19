@@ -7,24 +7,6 @@ Mail To: Kondasamy@outlook.com-->
     <tns:action id="TestStepSaveResponseAction" actionClass="com.kondasamy.soapui.plugin.TestStepExportRunResultsAction"/>
     <tns:action id="TestCaseSaveResponseAction" actionClass="com.kondasamy.soapui.plugin.TestCaseExportRunResultsAction"/>
     <tns:action id="TestSuiteSaveResponseAction" actionClass="com.kondasamy.soapui.plugin.TestSuiteExportRunResultsAction"/>
-    <tns:action id="ProjectSaveResponseAction" actionClass="com.kondasamy.soapui.plugin.ProjectCreateTestRunAction"/>
-    <tns:action id="GenerateTestHarnessRestAction" actionClass="com.kondasamy.soapui.plugin.GenerateTestHarnessRestAction"/>
-
-    <!--Multiple selection actions-->
-    <tns:action id="MultiTestCaseDeleteAction" actionClass="com.kondasamy.soapui.plugin.MultiTestCaseDeleteAction"/>
-
-    <!--Action grouping for the exporting options-->
-    <tns:actionGroup id="RestTestRequestStepActions">
-        <tns:actionMapping actionId="TestStepSaveResponseAction" position="BEFORE" positionRef="RenameTestCaseAction"/>
-    </tns:actionGroup>
-
-    <tns:actionGroup id="HttpTestRequestStepActions">
-        <tns:actionMapping actionId="TestStepSaveResponseAction" position="BEFORE" positionRef="RenameTestCaseAction"/>
-    </tns:actionGroup>
-
-    <tns:actionGroup id="WsdlTestRequestStepActions">
-        <tns:actionMapping actionId="TestStepSaveResponseAction" position="BEFORE" positionRef="RenameTestCaseAction"/>
-    </tns:actionGroup>
 
     <tns:actionGroup id="WsdlTestCaseActions">
         <tns:actionMapping actionId="TestCaseSaveResponseAction"/>
@@ -41,27 +23,6 @@ Mail To: Kondasamy@outlook.com-->
     <tns:actionGroup id="TestSuiteActions">
         <tns:actionMapping actionId="TestSuiteSaveResponseAction"/>
     </tns:actionGroup>
-
-    <tns:actionGroup id="EnabledWsdlProjectActions">
-        <tns:actionMapping actionId="ProjectSaveResponseAction"/>
-    </tns:actionGroup>
-
-    <tns:actionGroup id="WsdlProjectActions">
-        <tns:actionMapping actionId="ProjectSaveResponseAction"/>
-    </tns:actionGroup>
-
-    <tns:actionGroup id="ProjectActions">
-        <tns:actionMapping actionId="ProjectSaveResponseAction"/>
-    </tns:actionGroup>
-
-    <tns:actionGroup id="RestServiceActions">
-        <tns:actionMapping actionId="GenerateTestHarnessRestAction"/>
-    </tns:actionGroup>
-
-    <!--Action grouping for Multiple selection actions-->
-    <!--<tns:actionGroup id="SoapUIMultiActions">-->
-        <!--<tns:actionMapping actionId="MultiTestCaseDeleteAction"/>-->
-    <!--</tns:actionGroup>-->
 
 </tns:soapui-actions>
 

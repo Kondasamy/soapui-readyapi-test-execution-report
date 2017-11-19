@@ -15,7 +15,7 @@ import com.kondasamy.soapui.plugin.settings.DatabasePrefs
 import groovy.sql.Sql
 
 @ListenerConfiguration
-public class SamyTestRunListener extends TestRunListenerAdapter
+public class TestRunReportListener extends TestRunListenerAdapter
 {
     @Override
     public void afterStep(TestCaseRunner testRunner, TestCaseRunContext runContext, TestStepResult result)

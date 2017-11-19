@@ -50,12 +50,6 @@ class TestCaseExportRunResultsAction extends AbstractSoapUIAction<TestCase>
                             String result1 = result.replaceAll("-", "");
                             String fileName = tcName+"__" +tstName+ "__" + result1 +".txt"
 
-//                            String fileName1 = fileName.replaceAll("/", "-");
-//                            String fileName2 = fileName1.replaceAll(";","-");
-//                            String fileName3 = fileName2.replaceAll(":","-");
-//                            String fileName4 = fileName3.replaceAll(",","-");
-//                            String fileName5 = fileName4.replaceAll("\\?","-");
-//                            String fileName6 = fileName5.replaceAll("-","_")
                             String fileName6 = fileName.replaceAll("[^a-zA-Z0-9.-]", "_")
 
                             def mainDir = System.getProperty('user.home')
@@ -111,12 +105,6 @@ class TestCaseExportRunResultsAction extends AbstractSoapUIAction<TestCase>
                             String result1 = result.replaceAll("-", "");
                             String fileName = tcName+"__" +tstName+ "__" + result1 +".txt"
 
-//                            String fileName1 = fileName.replaceAll("/", "-");
-//                            String fileName2 = fileName1.replaceAll(";","-");
-//                            String fileName3 = fileName2.replaceAll(":","-");
-//                            String fileName4 = fileName3.replaceAll(",","-");
-//                            String fileName5 = fileName4.replaceAll("\\?","-");
-//                            String fileName6 = fileName5.replaceAll("-","_")
                             String fileName6 = fileName.replaceAll("[^a-zA-Z0-9.-]", "_")
 
                             def mainDir = System.getProperty('user.home')
