@@ -11,15 +11,35 @@ import com.eviware.soapui.model.testsuite.TestCaseRunner
 import com.eviware.soapui.model.testsuite.TestStepResult
 import com.eviware.soapui.plugins.ListenerConfiguration
 import com.eviware.soapui.support.GroovyUtils
-import org.apache.xmlbeans.impl.tool.XSTCTester.TestCaseResult
 
 @ListenerConfiguration
 public class TestRunReportListener extends TestRunListenerAdapter
 {
     @Override
-    void afterRun(TestCaseRunner testRunner, TestCaseRunContext runContext, TestCaseResult result)
+    void afterRun(TestCaseRunner testRunner, TestCaseRunContext runContext)
     {
-        super.afterRun(testRunner, runContext)
+        def currentUser = System.getProperty('user.name')
+        def now = new Date().format('yyyy-MM-dd HH:mm:ss')
+        def today = new Date().format('yyyyMMdd')
+        def projectName = runContext.modelItem.project.name.replaceAll("[^a-zA-Z0-9.-]", "_")
+        def userDir = System.getProperty('user.home')
+        def SoapUIDir = new File(userDir,"\\SoapUI Test Report\\")
+        def fileName = "$projectName Test report - $today"+".xlsx"
+        if(SoapUIDir.exists())
+        {
+            file = new File(SoapUIDir,fileName)
+        }
+        else
+        {
+            SoapUIDir.mkdirs()
+            file = new File(SoapUIDir,fileName)
+        }
+
+
+    }
+
+    private void createXLSXFile()
+    {
 
     }
     //    @Override
