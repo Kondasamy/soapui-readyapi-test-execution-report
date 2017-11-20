@@ -126,14 +126,10 @@ class TestCaseExportRunResultsAction extends AbstractSoapUIAction<TestCase>
                                 file << "Raw Request:" + System.getProperty("line.separator") + rawRequest+System.getProperty("line.separator")+System.getProperty("line.separator") + "Raw Response :"+ System.getProperty("line.separator")+ rawResponse
                             }
                             SoapUI.log.info "***Raw Request and Raw Response is exported to a file :: ==>"+mainDir+ SubDir+"\\"+fileName6
-
                         }
-
                 }
-
         UISupport.showInfoMessage("Artifacts Successfully exported!! Please see the SoapUI log for more information!","File Export Success!!!")
     }
-
 }
 /**
  * Created by Kondasamy J

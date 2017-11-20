@@ -22,19 +22,21 @@
     <version>1.0</version>
 
     <dependencies>
-
         <dependency>
             <groupId>com.smartbear.soapui</groupId>
             <artifactId>soapui-pro</artifactId>
             <version>5.1.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.smartbear.soapui</groupId>
             <artifactId>soapui</artifactId>
             <version>5.1.2</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.9</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -50,6 +52,7 @@
                 <artifactId>gmaven-plugin</artifactId>
                 <version>1.5</version>
                 <configuration>
+                    <source>JavaSE-1.8</source>
                     <providerSelection>1.8</providerSelection>
                 </configuration>
                 <executions>
