@@ -23,7 +23,7 @@ public class TestRunReportListener extends TestRunListenerAdapter
         def today = new Date().format('yyyyMMdd')
         def projectName = runContext.modelItem.project.name.replaceAll("[^a-zA-Z0-9.-]", "_")
         def userDir = System.getProperty('user.home')
-        def SoapUIDir = new File(userDir,"\\SoapUI Test Report\\")
+        def SoapUIDir = new File(userDir,"\\Midun SoapUI Test Report\\")
         def fileName = "$projectName Test report - $today"+".xlsx"
         if(SoapUIDir.exists())
         {
