@@ -1,5 +1,7 @@
 package com.kondasamy.soapui.plugin.utilities
 
+import org.apache.poi.ss.usermodel.CellStyle
+import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFRow
@@ -27,6 +29,13 @@ else
 XSSFWorkbook workBookWrite = new XSSFWorkbook()
 XSSFSheet sheetWrite = workBookWrite.createSheet("SoapUITestReport")
 println "Sheet created : count -> "+workBookWrite.numberOfSheets
+
+//Style setting for 1-3 rows
+def style = workBookWrite.createCellStyle()
+style.setFillForegroundColor(IndexedColors.LIGHT_GREEN.index)
+style.setFillPattern(CellStyle.SOLID_FOREGROUND)
+style.setFont(workBookWrite.createFont().setBold(true))
+
 //iterating r number of rows
 for (int r=0;r < 5; r++ )
 {
@@ -36,9 +45,12 @@ for (int r=0;r < 5; r++ )
     {
         XSSFCell cell = row.createCell(c)
         cell.setCellValue("Cell "+r+" "+c)
+        if (r<3)
+            cell.setCellStyle(style)
         //println "Created row -> $r column -> $c"
     }
     println "Row Number -> "+sheetWrite.lastRowNum
+
 }
 workBookWrite.write(new FileOutputStream(file))
 println("Done")

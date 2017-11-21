@@ -4,13 +4,19 @@ package com.kondasamy.soapui.plugin
  * Created by Kondasamy Jayaraman
  * Contact: Kondasamy@outlook.com
  */
-import com.eviware.soapui.SoapUI;
+import com.eviware.soapui.SoapUI
 import com.eviware.soapui.model.support.TestRunListenerAdapter
 import com.eviware.soapui.model.testsuite.TestCaseRunContext
 import com.eviware.soapui.model.testsuite.TestCaseRunner
-import com.eviware.soapui.model.testsuite.TestStepResult
 import com.eviware.soapui.plugins.ListenerConfiguration
-import com.eviware.soapui.support.GroovyUtils
+
+import org.apache.poi.ss.usermodel.CellStyle
+import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xssf.usermodel.XSSFSheet
+import org.apache.poi.xssf.usermodel.XSSFRow
+import org.apache.poi.xssf.usermodel.XSSFCell
+
 
 @ListenerConfiguration
 public class TestRunReportListener extends TestRunListenerAdapter
@@ -25,23 +31,49 @@ public class TestRunReportListener extends TestRunListenerAdapter
         def userDir = System.getProperty('user.home')
         def SoapUIDir = new File(userDir,"\\Midun SoapUI Test Report\\")
         def fileName = "$projectName Test report - $today"+".xlsx"
-        if(SoapUIDir.exists())
+        //Directory existence check
+        if (SoapUIDir.exists())
         {
             file = new File(SoapUIDir,fileName)
+            SoapUI.log "File exists"+file.absolutePath
         }
         else
         {
             SoapUIDir.mkdirs()
             file = new File(SoapUIDir,fileName)
+            SoapUI.log "File doesn't exists; but created -> "+file.absolutePath
         }
 
+        XSSFWorkbook workBookWrite = new XSSFWorkbook()
+        XSSFSheet sheetWrite = workBookWrite.createSheet("SoapUITestReport")
+        SoapUI.log "Sheet created : count -> "+workBookWrite.numberOfSheets
+
+        //Style setting for 1-3 rows
+        def style = workBookWrite.createCellStyle()
+        style.setFillForegroundColor(IndexedColors.LIGHT_GREEN.index)
+        style.setFillPattern(CellStyle.SOLID_FOREGROUND)
+
+        //iterating r number of rows
+        for (int r=0;r < 5; r++ )
+        {
+            XSSFRow row = sheetWrite.createRow(r)
+            //iterating c number of columns
+            for (int c=0;c < 5; c++ )
+            {
+                XSSFCell cell = row.createCell(c)
+                cell.setCellValue("Cell "+r+" "+c)
+                if (r<3)
+                    cell.setCellStyle(style)
+                //SoapUI.log "Created row -> $r column -> $c"
+            }
+            SoapUI.log "Row Number -> "+sheetWrite.lastRowNum
+
+        }
+        workBookWrite.write(new FileOutputStream(file))
+        SoapUI.log "Done"
 
     }
 
-    private void createXLSXFile()
-    {
-
-    }
     //    @Override
 //    public void afterStep(TestCaseRunner testRunner, TestCaseRunContext runContext, TestStepResult result)
 //    {
