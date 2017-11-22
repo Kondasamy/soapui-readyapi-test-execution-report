@@ -1,5 +1,6 @@
 package com.kondasamy.soapui.plugin.utilities
 
+//Dummy standalone test file created to test Apache POI functionality
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.Font
 import org.apache.poi.ss.usermodel.IndexedColors

@@ -5,6 +5,6 @@
     Mail To: Kondasamy@outlook.com-->
 
      <tns:listener id="TestRunListener"
-               listenerClass="com.kondasamy.soapui.plugin.TestRunReportListener"
-               listenerInterface="com.eviware.soapui.model.testsuite.TestRunListener"/>
+               listenerClass="com.kondasamy.soapui.plugin.ProjectRunReportListener"
+               listenerInterface="com.eviware.soapui.model.testsuite.ProjectRunListener"/>
 </tns:soapui-listeners>
