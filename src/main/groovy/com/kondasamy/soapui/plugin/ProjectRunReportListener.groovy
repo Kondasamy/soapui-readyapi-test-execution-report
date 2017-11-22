@@ -150,7 +150,8 @@ public class ProjectRunReportListener extends ProjectRunListenerAdapter
                                                 testCaseResult.results.each
                                                         {
                                                             testStepResult ->
-                                                                testCaseErrorMessage += testStepResult.messages
+                                                                if(testStepResult.messages != null)
+                                                                    testCaseErrorMessage += testStepResult.messages
                                                         }
                                             }
                                             else
