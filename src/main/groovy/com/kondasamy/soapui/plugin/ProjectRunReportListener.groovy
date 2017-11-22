@@ -28,7 +28,7 @@ public class ProjectRunReportListener extends ProjectRunListenerAdapter
             //def currentUser = System.getProperty('user.name')
             //def now = new Date().format('yyyy-MM-dd HH:mm:ss')
             def today = new Date().format('yyyyMMdd')
-            def projectName = runContext.modelItem.project.name.replaceAll("[^a-zA-Z0-9.-]", "_")
+            def projectName = projectRunner.project.name.replaceAll("[^a-zA-Z0-9.-]", "_")
             def userDir = System.getProperty('user.home')
             def SoapUIDir = new File(userDir,"\\Midun SoapUI Test Report\\")
             def fileName = "$projectName - Test execution report - $today"+".xlsx"
@@ -123,10 +123,14 @@ public class ProjectRunReportListener extends ProjectRunListenerAdapter
             //Initialize the first row of the file with header
             XSSFRow rowData = sheetWrite.createRow(row)
             rowData.createCell(0).setCellValue("TESTCASE NAME")
+            {
+                it.setCellValue("TESTCASE NAME")
+                it.setCellStyle()
+            }
+
             rowData.createCell(1).setCellValue("TESTCASE STATUS")
             rowData.createCell(3).setCellValue("TIMESTAMP")
             rowData.createCell(4).setCellValue("REMARKS")
-            rowData.setRowStyle(headerStyle)
             row++
 
             //Initiate project result collection
