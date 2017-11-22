@@ -1,6 +1,7 @@
 package com.kondasamy.soapui.plugin.utilities
 
 import org.apache.poi.ss.usermodel.CellStyle
+import org.apache.poi.ss.usermodel.Font
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.xssf.usermodel.XSSFSheet
@@ -32,9 +33,21 @@ println "Sheet created : count -> "+workBookWrite.numberOfSheets
 
 //Style setting for 1-3 rows
 def style = workBookWrite.createCellStyle()
-style.setFillForegroundColor(IndexedColors.LIGHT_GREEN.index)
+style.setFillForegroundColor(IndexedColors.GOLD.index)
 style.setFillPattern(CellStyle.SOLID_FOREGROUND)
-style.setFont(workBookWrite.createFont().setBold(true))
+style.setBorderBottom(CellStyle.BORDER_THIN)
+style.setBottomBorderColor(IndexedColors.BLACK.index)
+style.setBorderLeft(CellStyle.BORDER_THIN)
+style.setLeftBorderColor(IndexedColors.GREEN.index)
+style.setBorderRight(CellStyle.BORDER_THIN)
+style.setRightBorderColor(IndexedColors.BLUE.index)
+style.setBorderTop(CellStyle.BORDER_MEDIUM_DASHED)
+style.setTopBorderColor(IndexedColors.BLACK.index)
+Font font = workBookWrite.createFont()
+font.setBold(true)
+font.setColor(IndexedColors.WHITE.index)
+font.setBoldweight(Font.BOLDWEIGHT_BOLD)
+style.setFont(font)
 
 //iterating r number of rows
 for (int r=0;r < 5; r++ )
