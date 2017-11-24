@@ -18,7 +18,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFRow
 
 @ListenerConfiguration
-public class ProjectRunReportListener extends ProjectRunListenerAdapter
+class ProjectRunReportListener extends ProjectRunListenerAdapter
 {
     @Override
     void afterRun(ProjectRunner projectRunner, ProjectRunContext runContext)
@@ -30,7 +30,7 @@ public class ProjectRunReportListener extends ProjectRunListenerAdapter
             def today = new Date().format('yyyyMMdd')
             def projectName = projectRunner.project.name.replaceAll("[^a-zA-Z0-9.-]", "_")
             def userDir = System.getProperty('user.home')
-            def SoapUIDir = new File(userDir,"\\Midun SoapUI Test Report\\")
+            def SoapUIDir = new File(userDir,"\\SoapUI Test Report\\")
             def fileName = "$projectName - Test execution report - $today"+".xlsx"
             def file
             //Directory existence check
@@ -118,19 +118,35 @@ public class ProjectRunReportListener extends ProjectRunListenerAdapter
 
             //Initialize SoapUI data sets
             def testCaseName, testCaseErrorMessage, testRunStatus, testTimeStamp
-            def row = 0, col = 0
+            def row = 0//, col = 0
 
             //Initialize the first row of the file with header
             XSSFRow rowData = sheetWrite.createRow(row)
-            rowData.createCell(0).setCellValue("TESTCASE NAME")
+            rowData.createCell(0).each
             {
-                it.setCellValue("TESTCASE NAME")
-                it.setCellStyle()
+                cell ->
+                cell.setCellValue("TESTCASE NAME")
+                cell.setCellStyle(headerStyle)
             }
 
-            rowData.createCell(1).setCellValue("TESTCASE STATUS")
-            rowData.createCell(3).setCellValue("TIMESTAMP")
-            rowData.createCell(4).setCellValue("REMARKS")
+            rowData.createCell(1).each
+            {
+                cell ->
+                    cell.setCellValue("TESTCASE STATUS")
+                    cell.setCellStyle(headerStyle)
+            }
+            rowData.createCell(3).each
+            {
+                cell ->
+                    cell.setCellValue("TIMESTAMP")
+                    cell.setCellStyle(headerStyle)
+            }
+            rowData.createCell(4).each
+            {
+                cell ->
+                    cell.setCellValue("REMARKS")
+                    cell.setCellStyle(headerStyle)
+            }
             row++
 
             //Initiate project result collection
@@ -156,18 +172,92 @@ public class ProjectRunReportListener extends ProjectRunListenerAdapter
                                             }
                                             else
                                                 testCaseErrorMessage = "OK"
+                                            //Debug trace
+                                            SoapUI.log "RESULT EXPORTER :: $testCaseName , $testRunStatus, $testTimeStamp ,$testCaseErrorMessage"
                                             //Initialize testcase data
                                             rowData = sheetWrite.createRow(row)
-                                            rowData.createCell(0).setCellValue(testCaseName)
-                                            rowData.createCell(1).setCellValue(testRunStatus)
-                                            rowData.createCell(3).setCellValue(testTimeStamp)
-                                            rowData.createCell(4).setCellValue(testCaseErrorMessage.toString())
                                             if(testRunStatus == "FAILED")
-                                                rowData.setRowStyle(failStyle)
+                                            {
+                                                rowData.createCell(0).each
+                                                {
+                                                    cell ->
+                                                        cell.setCellValue(testCaseName.toString())
+                                                        cell.setCellStyle(failStyle)
+                                                }
+                                                rowData.createCell(1).each
+                                                {
+                                                    cell ->
+                                                        cell.setCellValue(testRunStatus.toString())
+                                                        cell.setCellStyle(failStyle)
+                                                }
+                                                rowData.createCell(3).each
+                                                {
+                                                    cell ->
+                                                        cell.setCellValue(testTimeStamp.toString())
+                                                        cell.setCellStyle(failStyle)
+                                                }
+                                                rowData.createCell(4).each
+                                                {
+                                                    cell ->
+                                                        cell.setCellValue(testCaseErrorMessage.toString())
+                                                        cell.setCellStyle(failStyle)
+                                                }
+                                            }
                                             else if (testRunStatus == "FINISHED")
-                                                rowData.setRowStyle(passStyle)
+                                            {
+                                                rowData.createCell(0).each
+                                                {
+                                                    cell ->
+                                                        cell.setCellValue(testCaseName.toString())
+                                                        cell.setCellStyle(passStyle)
+                                                }
+                                                rowData.createCell(1).each
+                                                {
+                                                    cell ->
+                                                        cell.setCellValue(testRunStatus.toString())
+                                                        cell.setCellStyle(passStyle)
+                                                }
+                                                rowData.createCell(3).each
+                                                {
+                                                    cell ->
+                                                        cell.setCellValue(testTimeStamp.toString())
+                                                        cell.setCellStyle(passStyle)
+                                                }
+                                                rowData.createCell(4).each
+                                                {
+                                                    cell ->
+                                                        cell.setCellValue(testCaseErrorMessage.toString())
+                                                        cell.setCellStyle(passStyle)
+                                                }
+                                            }
                                             else
-                                                rowData.setRowStyle(defaultStyle)
+                                            {
+                                                rowData.createCell(0).each
+                                                {
+                                                    cell ->
+                                                        cell.setCellValue(testCaseName.toString())
+                                                        cell.setCellStyle(defaultStyle)
+                                                }
+                                                rowData.createCell(1).each
+                                                {
+                                                    cell ->
+                                                        cell.setCellValue(testRunStatus.toString())
+                                                        cell.setCellStyle(defaultStyle)
+                                                }
+                                                rowData.createCell(3).each
+                                                {
+                                                    cell ->
+                                                        cell.setCellValue(testTimeStamp.toString())
+                                                        cell.setCellStyle(defaultStyle)
+                                                }
+                                                rowData.createCell(4).each
+                                                {
+                                                    cell ->
+                                                        cell.setCellValue(testCaseErrorMessage.toString())
+                                                        cell.setCellStyle(defaultStyle)
+                                                }
+                                            }
+
                                             row++
                                     }
                     }

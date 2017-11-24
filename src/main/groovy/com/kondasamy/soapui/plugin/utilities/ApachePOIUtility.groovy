@@ -57,10 +57,16 @@ for (int r=0;r < 5; r++ )
     //iterating c number of columns
     for (int c=0;c < 5; c++ )
     {
-        XSSFCell cell = row.createCell(c)
+/*        XSSFCell cell = row.createCell(c)
         cell.setCellValue("Cell "+r+" "+c)
         if (r<3)
-            cell.setCellStyle(style)
+            cell.setCellStyle(style)*/
+        row.createCell(c).each
+                {
+                    cell->
+                        cell.setCellValue("Cell "+r+" "+c)
+                        cell.setCellStyle(style)
+                }
         //println "Created row -> $r column -> $c"
     }
     println "Row Number -> "+sheetWrite.lastRowNum
