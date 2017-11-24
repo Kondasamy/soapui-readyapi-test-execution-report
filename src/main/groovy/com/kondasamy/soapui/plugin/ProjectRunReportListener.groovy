@@ -49,12 +49,14 @@ class ProjectRunReportListener extends ProjectRunListenerAdapter
             //Initiate XSSF Workbook
             XSSFWorkbook workBookWrite = new XSSFWorkbook()
             XSSFSheet sheetWrite = workBookWrite.createSheet("SoapUITestReport")
+            sheetWrite.setColumnWidth(0,10000)
+            sheetWrite.setColumnWidth(1,4000)
+            sheetWrite.setColumnWidth(2,6000)
+            sheetWrite.setColumnWidth(3,24000)
             SoapUI.log "RESULT EXPORTER :: Sheet created :: name -> "+workBookWrite.getSheetAt(0).sheetName
 
             //Header style
             def headerStyle = workBookWrite.createCellStyle()
-            headerStyle.setFillForegroundColor(IndexedColors.GOLD.index)
-            headerStyle.setFillPattern(CellStyle.SOLID_FOREGROUND)
             headerStyle.setFillForegroundColor(IndexedColors.GOLD.index)
             headerStyle.setFillPattern(CellStyle.SOLID_FOREGROUND)
             headerStyle.setBorderBottom(CellStyle.BORDER_DASH_DOT_DOT)
@@ -65,17 +67,17 @@ class ProjectRunReportListener extends ProjectRunListenerAdapter
             headerStyle.setRightBorderColor(IndexedColors.BLUE.index)
             headerStyle.setBorderTop(CellStyle.BORDER_THIN)
             headerStyle.setTopBorderColor(IndexedColors.BLACK.index)
-            Font passStyleFont = workBookWrite.createFont()
-            passStyleFont.setBold(true)
-            passStyleFont.setColor(IndexedColors.WHITE.index)
-            passStyleFont.setBoldweight(Font.BOLDWEIGHT_BOLD)
-            headerStyle.setFont(passStyleFont)
+            Font headerStyleFont = workBookWrite.createFont()
+            headerStyleFont.setBold(true)
+            headerStyleFont.setColor(IndexedColors.WHITE.index)
+            headerStyleFont.setBoldweight(Font.BOLDWEIGHT_BOLD)
+            headerStyle.setFont(headerStyleFont)
+            headerStyle.setWrapText(true)
+            headerStyle.setAlignment(CellStyle.ALIGN_CENTER)
 
             //Pass status style
             def passStyle = workBookWrite.createCellStyle()
             passStyle.setFillForegroundColor(IndexedColors.LIGHT_GREEN.index)
-            passStyle.setFillPattern(CellStyle.SOLID_FOREGROUND)
-            passStyle.setFillForegroundColor(IndexedColors.GOLD.index)
             passStyle.setFillPattern(CellStyle.SOLID_FOREGROUND)
             passStyle.setBorderBottom(CellStyle.BORDER_THIN)
             passStyle.setBottomBorderColor(IndexedColors.BLACK.index)
@@ -85,12 +87,11 @@ class ProjectRunReportListener extends ProjectRunListenerAdapter
             passStyle.setRightBorderColor(IndexedColors.BLUE.index)
             passStyle.setBorderTop(CellStyle.BORDER_THIN)
             passStyle.setTopBorderColor(IndexedColors.BLACK.index)
+            passStyle.setWrapText(true)
 
             //Fail status style
             def failStyle = workBookWrite.createCellStyle()
-            failStyle.setFillForegroundColor(IndexedColors.LIGHT_ORANGE.index)
-            failStyle.setFillPattern(CellStyle.SOLID_FOREGROUND)
-            failStyle.setFillForegroundColor(IndexedColors.GOLD.index)
+            failStyle.setFillForegroundColor(IndexedColors.RED.index)
             failStyle.setFillPattern(CellStyle.SOLID_FOREGROUND)
             failStyle.setBorderBottom(CellStyle.BORDER_THIN)
             failStyle.setBottomBorderColor(IndexedColors.BLACK.index)
@@ -100,12 +101,11 @@ class ProjectRunReportListener extends ProjectRunListenerAdapter
             failStyle.setRightBorderColor(IndexedColors.BLUE.index)
             failStyle.setBorderTop(CellStyle.BORDER_THIN)
             failStyle.setTopBorderColor(IndexedColors.BLACK.index)
+            failStyle.setWrapText(true)
 
             //Default style
             def defaultStyle = workBookWrite.createCellStyle()
-            defaultStyle.setFillForegroundColor(IndexedColors.GOLD.index)
-            defaultStyle.setFillPattern(CellStyle.SOLID_FOREGROUND)
-            defaultStyle.setFillForegroundColor(IndexedColors.GOLD.index)
+            defaultStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.index)
             defaultStyle.setFillPattern(CellStyle.SOLID_FOREGROUND)
             defaultStyle.setBorderBottom(CellStyle.BORDER_THIN)
             defaultStyle.setBottomBorderColor(IndexedColors.BLACK.index)
@@ -115,9 +115,10 @@ class ProjectRunReportListener extends ProjectRunListenerAdapter
             defaultStyle.setRightBorderColor(IndexedColors.BLUE.index)
             defaultStyle.setBorderTop(CellStyle.BORDER_THIN)
             defaultStyle.setTopBorderColor(IndexedColors.BLACK.index)
+            defaultStyle.setWrapText(true)
 
             //Initialize SoapUI data sets
-            def testCaseName, testCaseErrorMessage, testRunStatus, testTimeStamp
+            def testCaseName, testCaseErrorMessage, testRunStatus, testTimeStamp, testStepName
             def row = 0//, col = 0
 
             //Initialize the first row of the file with header
@@ -132,16 +133,16 @@ class ProjectRunReportListener extends ProjectRunListenerAdapter
             rowData.createCell(1).each
             {
                 cell ->
-                    cell.setCellValue("TESTCASE STATUS")
+                    cell.setCellValue("STATUS")
                     cell.setCellStyle(headerStyle)
             }
-            rowData.createCell(3).each
+            rowData.createCell(2).each
             {
                 cell ->
                     cell.setCellValue("TIMESTAMP")
                     cell.setCellStyle(headerStyle)
             }
-            rowData.createCell(4).each
+            rowData.createCell(3).each
             {
                 cell ->
                     cell.setCellValue("REMARKS")
@@ -159,21 +160,30 @@ class ProjectRunReportListener extends ProjectRunListenerAdapter
                                             //Collect SoapUI data
                                             testCaseName = testCaseResult.testCase.name
                                             testRunStatus = testCaseResult.status.toString()
-                                            testTimeStamp = testCaseResult.startTime
+                                            testTimeStamp = new Date(testCaseResult.startTime).format('yyyy-MM-dd HH:mm:ss')
+                                            testCaseErrorMessage = ""
+                                            //Debug trace
+                                            SoapUI.log "RESULT EXPORTER :: $testCaseName , $testRunStatus, $testTimeStamp"
                                             /* Check if status falls under - INITIALIZED, RUNNING, CANCELED, FINISHED, FAILED, WARNING;*/
                                             if(testCaseResult.status.toString() == "FAILED")
                                             {
                                                 testCaseResult.results.each
                                                         {
                                                             testStepResult ->
-                                                                if(testStepResult.messages != null)
-                                                                    testCaseErrorMessage += testStepResult.messages
+                                                            testStepResult.messages.each
+                                                                    {
+                                                                        message ->
+                                                                            if(message.toString()!= "null")
+                                                                            {
+                                                                                testStepName = testStepResult.testStep.name
+                                                                                testCaseErrorMessage +=  " $testStepName :: " + message.toString()+"\n"
+                                                                            }
+                                                                    }
                                                         }
+                                                SoapUI.log "RESULT EXPORTER :: Error -> $testCaseErrorMessage"
                                             }
                                             else
                                                 testCaseErrorMessage = "OK"
-                                            //Debug trace
-                                            SoapUI.log "RESULT EXPORTER :: $testCaseName , $testRunStatus, $testTimeStamp ,$testCaseErrorMessage"
                                             //Initialize testcase data
                                             rowData = sheetWrite.createRow(row)
                                             if(testRunStatus == "FAILED")
@@ -190,13 +200,13 @@ class ProjectRunReportListener extends ProjectRunListenerAdapter
                                                         cell.setCellValue(testRunStatus.toString())
                                                         cell.setCellStyle(failStyle)
                                                 }
-                                                rowData.createCell(3).each
+                                                rowData.createCell(2).each
                                                 {
                                                     cell ->
                                                         cell.setCellValue(testTimeStamp.toString())
                                                         cell.setCellStyle(failStyle)
                                                 }
-                                                rowData.createCell(4).each
+                                                rowData.createCell(3).each
                                                 {
                                                     cell ->
                                                         cell.setCellValue(testCaseErrorMessage.toString())
@@ -214,16 +224,16 @@ class ProjectRunReportListener extends ProjectRunListenerAdapter
                                                 rowData.createCell(1).each
                                                 {
                                                     cell ->
-                                                        cell.setCellValue(testRunStatus.toString())
+                                                        cell.setCellValue("PASSED")
                                                         cell.setCellStyle(passStyle)
                                                 }
-                                                rowData.createCell(3).each
+                                                rowData.createCell(2).each
                                                 {
                                                     cell ->
                                                         cell.setCellValue(testTimeStamp.toString())
                                                         cell.setCellStyle(passStyle)
                                                 }
-                                                rowData.createCell(4).each
+                                                rowData.createCell(3).each
                                                 {
                                                     cell ->
                                                         cell.setCellValue(testCaseErrorMessage.toString())
@@ -244,13 +254,13 @@ class ProjectRunReportListener extends ProjectRunListenerAdapter
                                                         cell.setCellValue(testRunStatus.toString())
                                                         cell.setCellStyle(defaultStyle)
                                                 }
-                                                rowData.createCell(3).each
+                                                rowData.createCell(2).each
                                                 {
                                                     cell ->
                                                         cell.setCellValue(testTimeStamp.toString())
                                                         cell.setCellStyle(defaultStyle)
                                                 }
-                                                rowData.createCell(4).each
+                                                rowData.createCell(3).each
                                                 {
                                                     cell ->
                                                         cell.setCellValue(testCaseErrorMessage.toString())
