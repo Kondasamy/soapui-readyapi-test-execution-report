@@ -29,7 +29,9 @@ class ProjectRunReportListener extends ProjectRunListenerAdapter
             //def now = new Date().format('yyyy-MM-dd HH:mm:ss')
             def today = new Date().format('yyyyMMdd')
             def projectName = projectRunner.project.name.replaceAll("[^a-zA-Z0-9.-]", "_")
-            def userDir = System.getProperty('user.home')
+            //userDir -> variable changed to project root directory to facilitate Jenkins job
+            //def userDir = System.getProperty('user.home')
+            def userDir = projectRunner.project.path
             def SoapUIDir = new File(userDir,"\\SoapUI Test Report\\")
             def fileName = "$projectName - Test execution report - $today"+".xlsx"
             def file
