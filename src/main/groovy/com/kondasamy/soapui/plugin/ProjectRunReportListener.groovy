@@ -31,7 +31,8 @@ class ProjectRunReportListener extends ProjectRunListenerAdapter
             def projectName = projectRunner.project.name.replaceAll("[^a-zA-Z0-9.-]", "_")
             //userDir -> variable changed to project root directory to facilitate Jenkins job
             //def userDir = System.getProperty('user.home')
-            def userDir = projectRunner.project.path
+            def groovyUtils = new com.eviware.soapui.support.GroovyUtils(runContext)
+            def userDir = groovyUtils.projectPath
             def SoapUIDir = new File(userDir,"\\SoapUI Test Report\\")
             def fileName = "$projectName - Test execution report - $today"+".xlsx"
             def file
